@@ -7,14 +7,14 @@ $ = function(id) {
 window.onload = function() {
   var img = new Image();
   // img.crossOrigin = 'Anonymous';
-  img.src = 'public/images/99.png';
+  img.src = '../public/images/hw2.png';
   img.onload = function() {
     histogramEqualizationAndSpatialFiltering(this);
   }
 }
 
 function histogramEqualizationAndSpatialFiltering(img) {
-  var original_image = $('original');
+  var original_image = $('original_image');
   original_image.width = img.width;
   original_image.height = img.height;
 
@@ -32,13 +32,15 @@ function histogramEqualizationAndSpatialFiltering(img) {
     }
   }
 
-  displayHistogram(tmp_data, 'original_histogram');
+  displayHistogram(tmp_data, 'original');
 
+  // 直方图均衡化
   var new_data;
   new_data = equalize_hist(tmp_data);
   outputImage(new_data, 'equalize_hist');
-  displayHistogram(new_data, 'equalize_hist_histogram');
+  displayHistogram(new_data, 'equalize_hist');
 
+  // 均值滤波
   var averaging_filters = new Array();
   var averaging_size = [3, 7, 11];
   for (var n = 0; n < 3; n++) {
@@ -57,6 +59,7 @@ function histogramEqualizationAndSpatialFiltering(img) {
     outputImage(new_data, 'averaging_filter');
   }
 
+  // 拉普拉斯滤波
   var laplace_filters = [
     [[0, 1, 0], [1, -4, 1], [0, 1, 0]],
     [[0, -1, 0], [-1, 4, -1], [0, -1, 0]],
@@ -64,14 +67,13 @@ function histogramEqualizationAndSpatialFiltering(img) {
     [[-1, -1, -1], [-1, 8, -1], [-1, -1, -1]]
   ];
   for (var i = 0; i < 4; i++) {
-    new_data = calibration(filter2d(tmp_data, laplace_filters[i]));
-    console.log(new_data);
+    new_data = filter2d(tmp_data, laplace_filters[i]);
     outputImage(new_data, 'laplace_filter');
   }
 
-  new_data = calibration(filter2d.highBoostFilter(tmp_data));
+  // 高提升滤波
+  new_data = filter2d.highBoostFilter(tmp_data);
   outputImage(new_data, 'high_boost_filter');
-
 }
 
 function calculateCDF(image_data) {
@@ -114,15 +116,16 @@ function equalize_hist(input_img) {
   return output_img;
 }
 
-function displayHistogram(image_data, id) {
+function displayHistogram(image_data, parent_id) {
   var height = image_data.length;
   var width = image_data[0].length;
   var pixel = [], pixel_num = [];
 
   for (var i = 0; i < 256; i++) {
-    pixel.push(i);
+    pixel.push('');
     pixel_num.push(0);
   }
+  pixel[0] = 0, pixel[255] = 255;
 
   for (var i = 0; i < height; i++) {
     for (var j = 0; j < width; j++) {
@@ -134,7 +137,7 @@ function displayHistogram(image_data, id) {
     labels: pixel,
     datasets: [
       {
-        label: id,
+        label: parent_id,
         fillColor: 'rgba(220,220,220,0.5)',
         strokeColor: 'rgba(220,220,220,0.8)',
         highlightFill: 'rgba(220,220,220,0.75)',
@@ -151,11 +154,13 @@ function displayHistogram(image_data, id) {
     barValueSpacing: 0,
   };
 
-  var histogram = $(id);
-  histogram.width = 1280;
+
+  var histogram = document.createElement('canvas');
+  histogram.width = 900;
   histogram.height = 400;
+  $(parent_id).appendChild(histogram);
   var ctx = histogram.getContext('2d');
-  var histogram = new Chart(ctx).Bar(data, options);
+  new Chart(ctx).Bar(data, options);
 }
 
 function filter2d(input_img, filter) {
@@ -192,28 +197,6 @@ function filter2d(input_img, filter) {
   return output_img;
 }
 
-function calibration(image_data) {
-  var height = image_data.length;
-  var width = image_data[0].length;
-  var max = -999999999, min = -max;
-
-  for (var i = 0; i < height; i++) {
-    for (var j = 0; j < width; j++) {
-      max = (max > image_data[i][j] ? max : image_data[i][j]);
-      min = (min < image_data[i][j] ? min : image_data[i][j]);
-    }
-  }
-
-  for (var i = 0; i < height; i++) {
-    for (var j = 0; j < width; j++) {
-      var new_value = 255 * (image_data[i][j] - min) / (max - min);
-      image_data[i][j] = Math.round(new_value);
-    }
-  }
-
-  return image_data;
-}
-
 filter2d.highBoostFilter = function(input_img) {
   var height = input_img.length;
   var width = input_img[0].length;
@@ -236,12 +219,10 @@ filter2d.highBoostFilter = function(input_img) {
     }
   }
 
-  console.log(output_img);
   return output_img;
 }
 
-
-function outputImage(new_data, id) {
+function outputImage(new_data, parent_id) {
   var height = new_data.length;
   var width = new_data[0].length;
 
@@ -263,7 +244,30 @@ function outputImage(new_data, id) {
   canvas.getContext('2d').putImageData(image_data, 0, 0);
 
   var br = document.createElement('br');
-  var parent_node = $(id);
+  var parent_node = $(parent_id);
   parent_node.appendChild(canvas);
   parent_node.appendChild(br);
 }
+
+// 按比例标定像素值范围
+// function calibration(image_data) {
+//   var height = image_data.length;
+//   var width = image_data[0].length;
+//   var max = -999999999, min = -max;
+
+//   for (var i = 0; i < height; i++) {
+//     for (var j = 0; j < width; j++) {
+//       max = (max > image_data[i][j] ? max : image_data[i][j]);
+//       min = (min < image_data[i][j] ? min : image_data[i][j]);
+//     }
+//   }
+
+//   for (var i = 0; i < height; i++) {
+//     for (var j = 0; j < width; j++) {
+//       var new_value = 255 * (image_data[i][j] - min) / (max - min);
+//       image_data[i][j] = Math.round(new_value);
+//     }
+//   }
+
+//   return image_data;
+// }

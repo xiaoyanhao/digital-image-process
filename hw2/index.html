@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8">
     <title>图像直方图均衡化与空间滤波</title>
-    <!-- <link rel="stylesheet" type="text/css" href="./index.css"> -->
+    <link rel="stylesheet" type="text/css" href="./index.css">
     <script type="text/javascript" src="./index.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
   </head>
@@ -10,13 +10,13 @@
   <body>
     <h1>原图像</h1>
     <hr>
-    <canvas id="original"></canvas>
-    <canvas id="original_histogram"></canvas>
+    <div id='original'>
+        <canvas id="original_image"></canvas>
+    </div>
 
     <h1>直方图均衡化</h1>
     <hr>
     <div id="equalize_hist"></div>
-    <canvas id="equalize_hist_histogram"></canvas>
 
     <h1>空间滤波</h1>
     <hr>
