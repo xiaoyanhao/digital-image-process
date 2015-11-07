@@ -7,7 +7,7 @@ $ = function(id) {
 window.onload = function() {
   var img = new Image();
   // img.crossOrigin = 'Anonymous';
-  img.src = './90.png';
+  img.src = 'public/images/hw1.png';
   img.onload = function() {
     scaleAndQuantize(this);
   }
