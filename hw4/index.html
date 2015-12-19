@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>图像复原和彩色图像处理</title>
+    <link rel="stylesheet" type="text/css" href="./index.css">
+    <script type="text/javascript" src="./index.js"></script>
+    <script type="text/javascript" src="./task1.js"></script>
+    <script type="text/javascript" src="./task2.js"></script>
+    <script type="text/javascript" src="./task3.js"></script>
+  </head>
+
+  <body>
+
+    <h1>图像滤波</h1>
+    <hr>
+    <h2>原图像</h2>
+    <div id='task1_original'>
+        <canvas id="task1_original_image"></canvas>
+    </div>
+
+    <h2>算术均值滤波</h2>
+    <div id="arithmetic_mean_filter"></div>
+
+    <h2>调和均值滤波</h2>
+    <div id="harmonic_mean_filter"></div>
+
+    <h2>反调和均值滤波</h2>
+    <div id="contraharmonic_mean_filter"></div>
+
+
+    <h1>图像去噪</h1>
+    <hr>
+    <h2>原图像</h2>
+    <div id='task2_original'>
+        <canvas id="task2_original_image"></canvas>
+    </div>
+
+    <h2>高斯噪声</h2>
+    <hr>
+    <div id="gaussian"></div>
+    <h3>算术均值滤波</h3>
+    <div id="gaussian_arithmetic_mean_filter"></div>
+    <h3>几何均值滤波</h3>
+    <div id="gaussian_geometric_mean_filter"></div>
+    <h3>中值滤波</h3>
+    <div id="gaussian_median_filter"></div>
+
+    <h2>盐噪声</h2>
+    <hr>
+    <div id="salt"></div>
+    <h3>调和均值滤波</h3>
+    <div id="salt_harmonic_mean_filter"></div>
+    <h3>反调和均值滤波</h3>
+    <div id="salt_contraharmonic_mean_filter"></div>
+
+    <h2>椒盐噪声</h2>
+    <hr>
+    <div id="salt_and_pepper"></div>
+    <h3>算术均值滤波</h3>
+    <div id="salt_and_pepper_arithmetic_mean_filter"></div>
+    <h3>几何均值滤波</h3>
+    <div id="salt_and_pepper_geometric_mean_filter"></div>
+    <h3>最大值滤波</h3>
+    <div id="salt_and_pepper_max_filter"></div>
+    <h3>最小值滤波</h3>
+    <div id="salt_and_pepper_min_filter"></div>
+    <h3>中值滤波</h3>
+    <div id="salt_and_pepper_median_filter"></div>
+
+
+    <h1>彩色图像直方图均衡化</h1>
+    <hr>
+    <h2>原图像</h2>
+    <div id='task3_original'>
+        <canvas id="task3_original_image"></canvas>
+    </div>
+
+    <h2>RGB通道各自的直方图均衡化</h2>
+    <div id='rgb_equalize_hist_1'></div>
+
+    <h2>RGB通道平均的直方图均衡化</h2>
+    <div id='rgb_equalize_hist_2'></div>
+
+  </body>
+</html>
